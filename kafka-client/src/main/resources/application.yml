@@ -1,0 +1,11 @@
+spring:
+  main:
+    banner-mode: off
+
+logging:
+  file: myapplication.log
+
+kafka:
+  bootstrap-servers: localhost:9092
+  topic:
+    helloworld: helloworld.topic
