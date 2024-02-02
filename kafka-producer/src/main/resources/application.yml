@@ -1,0 +1,24 @@
+kafka-conf:
+  private-case-topic: private_case_topic
+  different-information-topic: different_information_topic
+  report-details-topic: report_details_topic
+  server: localhost:9092
+#  server: localhost:9101
+
+server:
+  port: 8091
+
+spring:
+  kafka:
+    producer:
+      transactions: true
+      bootstrap-servers: ${kafka-conf.server}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: http://localhost:8081
+#    properties:
+#      acks: all
+#      retries: 2
+#    transactions:
+#      transaction-id-prefix: transaction-id-prefix

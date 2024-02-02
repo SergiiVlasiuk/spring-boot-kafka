@@ -1,0 +1,21 @@
+package com.vl.streaming.configuration;
+
+import com.vl.model.avro.ReportDetails;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.function.Function;
+
+@Configuration
+@Slf4j
+public class KafkaStreaming {
+
+    @Bean
+    Function<ReportDetails, ReportDetails> reportDetails() {
+        return data -> {
+            log.info("input reportDetails: {}", data);
+            return data;
+        };
+    }
+}

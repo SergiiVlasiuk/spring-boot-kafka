@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "Absence",
+  "namespace": "com.vl.model.avro",
+  "fields": [
+    {"name": "detailId", "type": "string"},
+    {"name": "detailName", "type": "string"},
+    {"name": "absenceType", "type": "string"}
+  ],
+  "extends": "ReportDetails"
+}

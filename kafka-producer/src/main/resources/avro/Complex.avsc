@@ -1,0 +1,24 @@
+{
+  "type": "record",
+  "name": "Template",
+  "namespace": "com.vl.model.avro2",
+  "fields": [
+    {"name": "name", "type": "string"},
+    {"name": "description", "type": "string"},
+    {"name": "different", "type": ["null", {
+      "type": "record",
+      "name": "PrivateCase",
+      "fields": [
+        {"name": "id", "type": "long"},
+        {"name": "description", "type": "string"}
+      ]
+    }, {
+      "type": "record",
+      "name": "DifferentInformation",
+      "fields": [
+        {"name": "title", "type": "string"},
+        {"name": "article", "type": "string"}
+      ]
+    }]}
+  ]
+}

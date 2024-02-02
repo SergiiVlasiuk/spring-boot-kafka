@@ -1,0 +1,69 @@
+kafka-conf:
+#  server: localhost:9101
+  server: localhost:9092
+  group: test-streams
+  consume-topic-private-case: private_case_topic
+  consume-topic-different: different_information_topic
+  private-case-dlq: private_case_dlq
+  different-dlq: different_information_dlq
+  produce-topic-private-case: private_case_topic_redirect
+  produce-topic-different: different_information_redirect
+  schema: http://localhost:8081
+
+spring:
+  application:
+    name: ${kafka-conf.group}-streaming
+  cloud:
+    function:
+      definition: privateCase;differentInformation
+    stream:
+      bindings:
+        privateCase-in-0:
+          contentType: application/*+avro
+          destination: ${kafka-conf.consume-topic-private-case}
+          group: ${kafka-conf.group}-streaming
+        privateCase-out-0:
+          contentType: application/*+avro
+          destination: ${kafka-conf.produce-topic-private-case}
+        differentInformation-in-0:
+          contentType: application/*+avro
+          destination: ${kafka-conf.consume-topic-different}
+          group: ${kafka-conf.group}-streaming
+        differentInformation-out-0:
+          contentType: application/*+avro
+          destination: ${kafka-conf.produce-topic-different}
+      kafka:
+        streams:
+          binder:
+            deserialization-exception-handler: sendToDlq
+            configuration:
+              commit.interval.ms: 100
+              default:
+                key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value.serde: io.confluent.kafka.streams.serdes.avro.GenericAvroSerde
+          bindings:
+            privateCase-in-0:
+              consumer:
+                dlqName: ${kafka-conf.private-case-dlq}
+            differentInformation-in-0:
+              consumer:
+                dlqName: ${kafka-conf.different-dlq}
+        binder:
+          brokers: ${kafka-conf.server}
+#          configuration:
+#            security.protocol: SSL
+#            ssl.truststore.location: ${kafka-conf.truststore}
+#            ssl.truststore.password: ${kafka-conf.trust-store-password}
+#            ssl.truststore.type: JKS
+#            ssl.keystore.location: ${kafka-conf.keystore}
+#            ssl.keystore.password: ${kafka-conf.key-store-password}
+#            ssl.key.password: ${kafka-conf.key-password}
+#            ssl.keystore.type: JKS
+#            ssl.enabled.protocols: TLSv1.2,TLSv1.1,TLSv1
+          schemaRegistryClient:
+            endpoint: ${kafka-conf.schema}
+
+logging:
+  level:
+    com.github.ulisesbocchio: INFO
+    com.bayer: DEBUG

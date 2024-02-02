@@ -1,0 +1,9 @@
+{
+  "type": "record",
+  "name": "Overtime",
+  "namespace": "com.vl.model.avro",
+  "fields": [
+    {"name": "absenceType", "type": "string"}
+  ],
+  "extends": "ReportDetails"
+}

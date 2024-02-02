@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "Attendance",
+  "namespace": "com.vl.model.avro",
+  "fields": [
+    {"name": "detailId", "type": "string"},
+    {"name": "detailName", "type": "string"},
+    {"name": "attendanceType", "type": "string"}
+  ],
+  "extends": "ReportDetails"
+}

@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "Report",
+  "namespace": "com.vl.model.avro",
+  "fields": [
+    {"name": "reportId", "type": "string"}
+    , {"name": "employee", "type": {"type": "Employee", "java-class": "com.vl.model.avro.Employee"}}
+//    , {"name": "employee", "type": "com.vl.model.avro.Employee"}
+//    , {"name": "employee", "type": "Employee"}
+//    , {"name": "employee", "type": ["null", "Employee"], "default": null}
+//    , {"name": "employee", "type": ["null", "com.vl.model.avro.Employee"], "default": null}
+//    , {"name": "employee", "type": ["null", {"type": "record", "name": "Employee", "fields": []}], "default": null}
+//    , {"name": "employee", "type": ["null", {"type": "record", "name": "com.vl.model.avro.Employee", "fields": []}], "default": null}
+//    , {"name": "employee", "type": ["null", "string"], "default": null}
+//    , {"name": "details", "type": {"type": "array", "items": "com.vl.model.avro.ReportDetails"}}
+//    , {"name": "details", "type": {"type": "array", "items": "ReportDetails"}}
+//    , {"name": "details", "type": {"type": "array", "items": {"type": "record", "name": "ReportDetails", "fields": []}}}
+  ]
+}

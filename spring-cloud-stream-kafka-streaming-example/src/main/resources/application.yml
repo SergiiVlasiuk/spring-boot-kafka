@@ -1,0 +1,55 @@
+kafka-conf:
+#  server: localhost:9101
+  server: localhost:9092
+  group: test-streams
+  consume-topic-report-details: report_details_topic
+  report-details-dlq: report_details_dlq
+  produce-topic-report-details: report_details_topic_redirect
+  schema: http://localhost:8081
+
+spring:
+  application:
+    name: ${kafka-conf.group}-streaming
+  cloud:
+    function:
+      definition: reportDetails
+    stream:
+      bindings:
+        reportDetails-in-0:
+          contentType: application/*+avro
+          destination: ${kafka-conf.consume-topic-report-details}
+          group: ${kafka-conf.group}-streaming
+        reportDetails-out-0:
+          contentType: application/*+avro
+          destination: ${kafka-conf.produce-topic-report-details}
+      kafka:
+        streams:
+          binder:
+            deserialization-exception-handler: sendToDlq
+            configuration:
+              commit.interval.ms: 100
+              default:
+                key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value.serde: io.confluent.kafka.streams.serdes.avro.GenericAvroSerde
+          bindings:
+            reportDetails-in-0:
+              consumer:
+                dlqName: ${kafka-conf.report-details-dlq}
+        binder:
+          brokers: ${kafka-conf.server}
+          schemaRegistryClient:
+            endpoint: ${kafka-conf.schema}
+          producer-properties:
+            allow.auto.create.topics: false
+            key.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+            value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+            schema.reflection: true
+            schema.registry.url: ${spring.cloud.schemaRegistryClient.endpoint}
+            auto.register.schemas: false
+            basic.auth.credentials.source: USER_INFO
+            basic.auth.user.info: ${spring.cloud.schemaRegistryClient.basic.auth.user}:${spring.cloud.schemaRegistryClient.basic.auth.password}
+
+logging:
+  level:
+    com.github.ulisesbocchio: INFO
+    com.bayer: DEBUG

@@ -1,0 +1,9 @@
+{
+  "type": "record",
+  "name": "ReportDetails",
+  "namespace": "com.vl.model.avro",
+  "fields": [
+    {"name": "detailId", "type": "string"},
+    {"name": "detailName", "type": "string"}
+  ]
+}
