@@ -85,6 +85,18 @@
 			<artifactId>avro-maven-plugin</artifactId>
 			<version>1.11.3</version>
 		</dependency>
+<!--
+this lib can simplify configuration.
+see https://cloud.spring.io/spring-cloud-stream/multi/multi_schema-evolution.html#_schema_registry_client_properties
+to activate it use `@EnableSchemaRegistryClient`
+in yml use `contentType=application/*+avro`
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-schema-registry-client</artifactId>
+		</dependency>
+
+-->
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -172,25 +184,13 @@
 					<schemaRegistryUrls>
 						<param>http://localhost:8081</param>
 					</schemaRegistryUrls>
-					<outputDirectory>src/main/avro</outputDirectory>
+					<outputDirectory>${project.build.directory}/avro</outputDirectory>
 					<subjectPatterns>
-						<param>^com.vl.model.*$</param>
+						<param>^com.vl.model.avro.*$</param>
 					</subjectPatterns>
 					<versions>
 						<param>latest</param>
 					</versions>
-					<references>
-						<com.vl.model.Report>
-							<reference>
-								<name>details</name>
-								<subject>com.vl.model.ReportDetails</subject>
-							</reference>
-							<reference>
-								<name>employee</name>
-								<subject>com.vl.model.Employee</subject>
-							</reference>
-						</com.vl.model.Report>
-					</references>
 				</configuration>
 			</plugin>
 
@@ -205,15 +205,15 @@
 							<goal>schema</goal>
 						</goals>
 						<configuration>
-							<sourceDirectory>${project.basedir}/src/main/avro</sourceDirectory>
-							<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+							<sourceDirectory>${project.build.directory}/avro</sourceDirectory>
 							<enableDecimalLogicalType>true</enableDecimalLogicalType>
-							<stringType>String</stringType>
+<!--							<stringType>String</stringType>-->
 							<fieldVisibility>PRIVATE</fieldVisibility>
 							<imports>
-								<import>${project.basedir}/src/main/avro/com.vl.model.Employee.avsc</import>
-								<import>${project.basedir}/src/main/avro/com.vl.model.ReportDetails.avsc</import>
+								<import>${project.build.directory}/avro/com.vl.model.avro.Employee.avsc</import>
+								<import>${project.build.directory}/avro/com.vl.model.avro.ReportDetails.avsc</import>
 							</imports>
+							<outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
 							<includes>
 								<include>*.avsc</include>
 							</includes>

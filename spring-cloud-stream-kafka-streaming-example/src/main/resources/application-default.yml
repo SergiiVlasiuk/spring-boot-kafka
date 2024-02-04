@@ -1,3 +1,4 @@
+# working example
 kafka-conf:
   server: localhost:9092
   group: test-streams
@@ -42,29 +43,16 @@ spring:
               schema.registry.url: ${kafka-conf.schema}
               key.serializer: org.apache.kafka.common.serialization.StringSerializer
               value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+#                value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicRecordNameStrategy
               value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
           consumer:
             configuration:
               schema.registry.url: ${kafka-conf.schema}
               key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
               value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+#                value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicRecordNameStrategy
               value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
               specific.avro.reader: true
-
-        bindings:
-          report-in-0:
-            consumer:
-              configuration:
-                schema.registry.url: ${kafka-conf.schema}
-                value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
-                specific.avro.reader: true
-                topic: ${kafka-conf.consume-topic-report}
-          report-out-0:
-            producer:
-              configuration:
-                schema.registry.url: ${kafka-conf.schema}
-                value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
-                topic: ${kafka-conf.produce-topic-report}
 
         binder:
           brokers: ${kafka-conf.server}

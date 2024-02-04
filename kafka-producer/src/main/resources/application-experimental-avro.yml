@@ -1,0 +1,56 @@
+# this experimental configuration for checking JsonSerializer.
+kafka-conf:
+  group-id: kafka-group
+  private-case-topic: private_case_topic
+  different-information-topic: different_information_topic
+  report-details-topic: report_details_topic
+  my-model-topic: my_model_topic
+  server: localhost:9092
+  schema-registry: http://localhost:8081
+
+server:
+  port: 8091
+
+spring:
+  kafka:
+    bootstrap-servers: ${kafka-conf.server}
+#    properties:
+#      schema.registry.url: ${kafka-conf.schema-registry}
+    producer:
+      transactions: true
+      bootstrap-servers: ${kafka-conf.server}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        auto.register.schemas: false
+        schema.registry.url: ${kafka-conf.schema-registry}
+#        value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
+        value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+    consumer:
+      group-id: ${kafka-conf.group-id}
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        schema.registry.url: ${kafka-conf.schema-registry}
+        specific.avro.reader: true
+        isolation.level: read_committed
+        max.poll.interval.ms: 3000
+        partition.assignment.strategy: org.apache.kafka.clients.consumer.RangeAssignor
+#        value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
+        value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+#        value.deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+#        spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+#        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+#        spring.json.trusted.packages: com.vl.producer.kafka
+
+    admin:
+      fail-fast: true
+#    properties:
+#      acks: all
+#      retries: 2
+#    transactions:
+#      transaction-id-prefix: transaction-id-prefix

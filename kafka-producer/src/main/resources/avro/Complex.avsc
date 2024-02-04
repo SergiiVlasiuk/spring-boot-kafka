@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "Template",
-  "namespace": "com.vl.model.avro2",
+  "namespace": "com.vl.model.avro",
   "fields": [
     {"name": "name", "type": "string"},
     {"name": "description", "type": "string"},

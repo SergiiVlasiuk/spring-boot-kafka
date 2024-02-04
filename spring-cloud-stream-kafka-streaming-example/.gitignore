@@ -3,9 +3,6 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-!**/src/main/avro/
-!**/src/main/java/com/vl/model/avro/
-!**/src/main/java/com/vl/model/avro2/
 
 ### STS ###
 .apt_generated

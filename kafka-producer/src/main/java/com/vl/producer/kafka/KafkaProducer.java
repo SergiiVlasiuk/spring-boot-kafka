@@ -1,8 +1,9 @@
 package com.vl.producer.kafka;
 
+import com.vl.model.avro.Report;
 import com.vl.model.avro.ReportDetails;
 import com.vl.producer.configuration.KafkaConfigurationModel;
-import com.vl.model.avro2.Template;
+import com.vl.model.avro.Template;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +30,15 @@ public class KafkaProducer {
         kafkaTemplate.send(kafkaTopics.getDifferentInformationTopic(), message);
     }
 
-    public void publishDifferentInformation(ReportDetails message){
+    public void publishReportDetails(ReportDetails message){
         kafkaTemplate.send(kafkaTopics.getReportDetailsTopic(), message);
     }
 
+    public void publishMyModel(MyModel message){
+        kafkaTemplate.send(kafkaTopics.getMyModelTopic(), message);
+    }
+
+    public void publishReport(Report message) {
+        kafkaTemplate.send(kafkaTopics.getReportTopic(), message);
+    }
 }

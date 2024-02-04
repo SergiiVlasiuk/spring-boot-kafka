@@ -35,6 +35,12 @@
 			<version>7.4.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro</artifactId>
+			<version>1.11.3</version>
+		</dependency>
+<!--
+		<dependency>
 			<groupId>io.confluent</groupId>
 			<artifactId>kafka-streams-avro-serde</artifactId>
 			<version>7.5.3</version>
@@ -44,6 +50,7 @@
 			<artifactId>kafka-schema-registry-client</artifactId>
 			<version>7.4.0</version>
 		</dependency>
+-->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -97,43 +104,43 @@
 					<schemaRegistryUrls>
 						<param>http://localhost:8081</param>
 					</schemaRegistryUrls>
-					<outputDirectory>src/main/avro</outputDirectory>
+					<outputDirectory>${project.build.directory}/avro</outputDirectory>
 					<subjectPatterns>
-						<param>^com.vl.model.*$</param>
+						<param>^com.vl.model.avro.*$</param>
 					</subjectPatterns>
 					<versions>
 						<param>latest</param>
 					</versions>
 
 					<subjects>
-						<com.vl.model.Complex>src/main/resources/avro/Complex.avsc</com.vl.model.Complex>
-						<com.vl.model.ReportDetails>src/main/resources/avro/ReportDetails.avsc</com.vl.model.ReportDetails>
-						<com.vl.model.Absence>src/main/resources/avro/Absence.avsc</com.vl.model.Absence>
-						<com.vl.model.Attendance>src/main/resources/avro/Attendance.avsc</com.vl.model.Attendance>
-						<com.vl.model.Employee>src/main/resources/avro/Employee.avsc</com.vl.model.Employee>
-						<com.vl.model.Report>src/main/resources/avro/Report.avsc</com.vl.model.Report>
-						<com.vl.model.Overtime>src/main/resources/avro/Overtime.avsc</com.vl.model.Overtime>
+						<com.vl.model.avro.Complex>src/main/resources/avro/Complex.avsc</com.vl.model.avro.Complex>
+						<com.vl.model.avro.ReportDetails>src/main/resources/avro/ReportDetails.avsc</com.vl.model.avro.ReportDetails>
+						<com.vl.model.avro.Absence>src/main/resources/avro/Absence.avsc</com.vl.model.avro.Absence>
+						<com.vl.model.avro.Attendance>src/main/resources/avro/Attendance.avsc</com.vl.model.avro.Attendance>
+						<com.vl.model.avro.Employee>src/main/resources/avro/Employee.avsc</com.vl.model.avro.Employee>
+						<com.vl.model.avro.Report>src/main/resources/avro/Report.avsc</com.vl.model.avro.Report>
+						<com.vl.model.avro.Overtime>src/main/resources/avro/Overtime.avsc</com.vl.model.avro.Overtime>
 					</subjects>
 					<schemaTypes>
-						<com.vl.model.Complex>AVRO</com.vl.model.Complex>
-						<com.vl.model.ReportDetails>AVRO</com.vl.model.ReportDetails>
-						<com.vl.model.Absence>AVRO</com.vl.model.Absence>
-						<com.vl.model.Attendance>AVRO</com.vl.model.Attendance>
-						<com.vl.model.Employee>AVRO</com.vl.model.Employee>
-						<com.vl.model.Report>AVRO</com.vl.model.Report>
-						<com.vl.model.Overtime>AVRO</com.vl.model.Overtime>
+						<com.vl.model.avro.Complex>AVRO</com.vl.model.avro.Complex>
+						<com.vl.model.avro.ReportDetails>AVRO</com.vl.model.avro.ReportDetails>
+						<com.vl.model.avro.Absence>AVRO</com.vl.model.avro.Absence>
+						<com.vl.model.avro.Attendance>AVRO</com.vl.model.avro.Attendance>
+						<com.vl.model.avro.Employee>AVRO</com.vl.model.avro.Employee>
+						<com.vl.model.avro.Report>AVRO</com.vl.model.avro.Report>
+						<com.vl.model.avro.Overtime>AVRO</com.vl.model.avro.Overtime>
 					</schemaTypes>
 					<references>
-						<com.vl.model.Report>
+						<com.vl.model.avro.Report>
 							<reference>
 								<name>details</name>
-								<subject>com.vl.model.ReportDetails</subject>
+								<subject>com.vl.model.avro.ReportDetails</subject>
 							</reference>
 							<reference>
 								<name>employee</name>
-								<subject>com.vl.model.Employee</subject>
+								<subject>com.vl.model.avro.Employee</subject>
 							</reference>
-						</com.vl.model.Report>
+						</com.vl.model.avro.Report>
 					</references>
 				</configuration>
 			</plugin>
@@ -151,22 +158,22 @@
 <!--							<goal>idl-protocol</goal>-->
 						</goals>
 						<configuration>
-							<sourceDirectory>${project.basedir}/src/main/avro</sourceDirectory>
+							<sourceDirectory>${project.build.directory}/avro</sourceDirectory>
 							<imports>
-								<import>${project.basedir}/src/main/avro/com.vl.model.Employee.avsc</import>
-								<import>${project.basedir}/src/main/avro/com.vl.model.ReportDetails.avsc</import>
-								<import>${project.basedir}/src/main/avro/com.vl.model.Overtime.avsc</import>
-								<import>${project.basedir}/src/main/avro/com.vl.model.Attendance.avsc</import>
-								<import>${project.basedir}/src/main/avro/com.vl.model.Absence.avsc</import>
-								<import>${project.basedir}/src/main/avro/com.vl.model.Report.avsc</import>
+								<import>${project.build.directory}/avro/com.vl.model.avro.Employee.avsc</import>
+								<import>${project.build.directory}/avro/com.vl.model.avro.ReportDetails.avsc</import>
+								<import>${project.build.directory}/avro/com.vl.model.avro.Overtime.avsc</import>
+								<import>${project.build.directory}/avro/com.vl.model.avro.Attendance.avsc</import>
+								<import>${project.build.directory}/avro/com.vl.model.avro.Absence.avsc</import>
+								<import>${project.build.directory}/avro/com.vl.model.avro.Report.avsc</import>
 							</imports>
-							<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
-							<enableDecimalLogicalType>true</enableDecimalLogicalType>
-							<stringType>String</stringType>
+							<outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
 							<fieldVisibility>PRIVATE</fieldVisibility>
+<!-- it is included by default
 							<includes>
 								<include>*.avsc</include>
 							</includes>
+-->
 						</configuration>
 					</execution>
 				</executions>

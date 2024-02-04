@@ -4,11 +4,6 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-## generated files
-!**/src/main/avro/
-!**/src/main/java/com/vl/model/avro/
-!**/src/main/java/com/vl/model/avro2/
-
 
 ### STS ###
 .apt_generated

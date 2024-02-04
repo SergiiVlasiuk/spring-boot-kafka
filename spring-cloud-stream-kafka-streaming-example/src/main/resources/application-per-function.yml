@@ -1,0 +1,103 @@
+kafka-conf:
+  server: localhost:9092
+  group: test-streams
+  consume-topic-report-details: report_details_topic
+  report-details-dlq: report_details_dlq
+  produce-topic-report-details: report_details_topic_redirect
+  consume-topic-report: report_topic
+  report-dlq: report_dlq
+  produce-topic-report: report_topic_redirect
+  schema: http://localhost:8081
+
+spring:
+  application:
+    name: ${kafka-conf.group}-streaming
+  cloud:
+    function:
+      definition: reportDetails;report
+    stream:
+      bindings:
+        reportDetails-in-0:
+          destination: ${kafka-conf.consume-topic-report-details}
+          consumer:
+            use-native-encoding: true
+          group: ${kafka-conf.group}-reportDetails
+        reportDetails-out-0:
+          destination: ${kafka-conf.produce-topic-report-details}
+          producer:
+            use-native-encoding: true
+        report-in-0:
+          destination: ${kafka-conf.consume-topic-report}
+          consumer:
+            use-native-encoding: true
+          group: ${kafka-conf.group}-report
+        report-out-0:
+          destination: ${kafka-conf.produce-topic-report}
+          producer:
+            use-native-encoding: true
+      kafka:
+        bindings:
+          reportDetails-in-0:
+            consumer:
+              configuration:
+                schema.registry.url: ${kafka-conf.schema}
+                key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+                value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+#                value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicRecordNameStrategy
+                value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+                specific.avro.reader: true
+#                value.subject.name.strategy: io.confluent.kafka.serializers.subject.SubjectPrefixOnlyNamingStrategy
+#                value.subject.name.strategy: org.springframework.cloud.stream.schema.avro.QualifiedSubjectNamingStrategy
+                topic: ${kafka-conf.consume-topic-report-details}
+          reportDetails-out-0:
+            producer:
+              configuration:
+                schema.registry.url: ${kafka-conf.schema}
+                key.serializer: org.apache.kafka.common.serialization.StringSerializer
+                value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+#                value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicRecordNameStrategy
+                value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+#                value.subject.name.strategy: io.confluent.kafka.serializers.subject.SubjectPrefixOnlyNamingStrategy
+#                value.subject.name.strategy: org.springframework.cloud.stream.schema.avro.QualifiedSubjectNamingStrategy
+                topic: ${kafka-conf.produce-topic-report-details}
+          report-in-0:
+            consumer:
+              configuration:
+                schema.registry.url: ${kafka-conf.schema}
+#                key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#                value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+#                value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicRecordNameStrategy
+                value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+                specific.avro.reader: true
+#                value.subject.name.strategy: io.confluent.kafka.serializers.subject.SubjectPrefixOnlyNamingStrategy
+#                value.subject.name.strategy: org.springframework.cloud.stream.schema.avro.QualifiedSubjectNamingStrategy
+                topic: ${kafka-conf.consume-topic-report}
+          report-out-0:
+            producer:
+              configuration:
+                schema.registry.url: ${kafka-conf.schema}
+#                key.serializer: org.apache.kafka.common.serialization.StringSerializer
+#                value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+#                value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicRecordNameStrategy
+                value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+#                value.subject.name.strategy: io.confluent.kafka.serializers.subject.SubjectPrefixOnlyNamingStrategy
+#                value.subject.name.strategy: org.springframework.cloud.stream.schema.avro.QualifiedSubjectNamingStrategy
+                topic: ${kafka-conf.produce-topic-report}
+
+#        streams:
+#          binder:
+#            deserialization-exception-handler: sendToDlq
+#            configuration:
+#              commit.interval.ms: 5900
+#          bindings:
+#            reportDetails-in-0:
+#              consumer:
+#                dlqName: ${kafka-conf.report-details-dlq}
+
+        binder:
+          brokers: ${kafka-conf.server}
+
+logging:
+  level:
+    com.github.ulisesbocchio: INFO
+    com.bayer: DEBUG

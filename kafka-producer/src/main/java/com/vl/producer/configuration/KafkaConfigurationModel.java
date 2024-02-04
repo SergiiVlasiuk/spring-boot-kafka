@@ -13,4 +13,6 @@ public class KafkaConfigurationModel {
     private String differentInformationTopic;
     private String privateCaseTopic;
     private String reportDetailsTopic;
+    private String myModelTopic;
+    private String reportTopic;
 }

@@ -1,16 +1,15 @@
 package com.vl.producer.kafka;
 
-import com.vl.model.avro.ReportDetails;
-import com.vl.model.avro2.DifferentInformation;
-import com.vl.model.avro2.PrivateCase;
-import com.vl.model.avro2.Template;
+import com.vl.model.avro.*;
 import io.micrometer.core.annotation.Timed;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
@@ -23,9 +22,9 @@ public class ScheduledService {
     private final KafkaProducer kafkaProducer;
 
     @Timed(value = "my.scheduled.task.time", description = "Time taken to execute scheduled task")
-    @Scheduled(fixedRate = 60000 * 5) // 60000 milliseconds = 1 minute
+//    @Scheduled(fixedRate = 60000 * 1) // 60000 milliseconds = 1 minute
     public void executeTask() {
-        log.info("Executing task every 5 minutes...");
+        log.info("[Template] Executing task every 1 minutes...");
         Random random = new Random();
         Template template;
         if (random.nextBoolean()) {
@@ -39,11 +38,46 @@ public class ScheduledService {
     }
 
     @Timed(value = "my.scheduled.task.time", description = "Time taken to execute scheduled task")
-    @Scheduled(fixedRate = 60000 * 2) // 60000 milliseconds = 1 minute
+    @Scheduled(fixedRate = 60000 * 1) // 60000 milliseconds = 1 minute
     public void executeTask2() {
-        log.info("Executing task every 2 minutes...");
+        log.info("[ReportDetails] Executing task every 1 minute...");
         final ReportDetails message = generateReportDetails();
-        kafkaProducer.publishDifferentInformation(message);
+        kafkaProducer.publishReportDetails(message);
+        log.info("generated: {}", message);
+    }
+    @Timed(value = "my.scheduled.task.time", description = "Time taken to execute scheduled task")
+//    @Scheduled(fixedRate = 60000 * 1) // 60000 milliseconds = 1 minute
+    public void executeTask3() {
+        log.info("[MyModel] Executing task every 1 minute...");
+        final MyModel message = MyModel.builder()
+                .id(UUID.randomUUID())
+                .name("name-" + randomAlphabetic(10))
+                .description("description-" + randomAlphabetic(10))
+                .build();
+        kafkaProducer.publishMyModel(message);
+        log.info("generated: {}", message);
+    }
+
+    @Timed(value = "my.scheduled.task.time", description = "Time taken to execute scheduled task")
+    @Scheduled(fixedRate = 60000 * 1) // 60000 milliseconds = 1 minute
+    public void executeTask4() {
+        log.info("[MyModel] Executing task every 1 minute...");
+        final Report message = Report.newBuilder()
+                .setReportId(UUID.randomUUID().toString())
+                .setEmployee(Employee.newBuilder()
+                        .setEmployeeId(UUID.randomUUID().toString())
+                        .setDepartment(Integer.parseInt(randomNumeric(3)))
+                        .setEmployeeName("EmployeeName-" + randomAlphabetic(4))
+                        .setPosition("Position-" + randomAlphabetic(3))
+                        .build())
+                .setDetails(List.of(
+                        ReportDetails.newBuilder()
+                                .setDetailId("DetailId-" + randomAlphabetic(7))
+                                .setDetailName("DetailName-" + randomAlphabetic(4))
+                        .build())
+                )
+                .build();
+        kafkaProducer.publishReport(message);
         log.info("generated: {}", message);
     }
 

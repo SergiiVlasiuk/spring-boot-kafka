@@ -1,5 +1,4 @@
 kafka-conf:
-#  server: localhost:9101
   server: localhost:9092
   group: test-streams
   consume-topic-private-case: private_case_topic
