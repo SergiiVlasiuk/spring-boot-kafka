@@ -42,7 +42,8 @@ spring:
               configuration:
                 schema.registry.url: ${kafka-conf.schema}
                 key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-                value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+                value.deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+                spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
 #                value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicRecordNameStrategy
                 value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
                 specific.avro.reader: true
