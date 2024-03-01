@@ -1,15 +1,8 @@
 # this experimental configuration for checking JsonSerializer.
 kafka-conf:
-  group-id: kafka-group
-  private-case-topic: private_case_topic
-  different-information-topic: different_information_topic
-  report-details-topic: report_details_topic
-  my-model-topic: my_model_topic
-  server: localhost:9092
+  group-id: avro-kafka-group
+  demo-topic: report_topic
   schema-registry: http://localhost:8081
-
-server:
-  port: 8091
 
 spring:
   kafka:
@@ -29,7 +22,6 @@ spring:
 #        value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
         value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
     consumer:
-      group-id: ${kafka-conf.group-id}
       auto-offset-reset: earliest
       enable-auto-commit: true
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer

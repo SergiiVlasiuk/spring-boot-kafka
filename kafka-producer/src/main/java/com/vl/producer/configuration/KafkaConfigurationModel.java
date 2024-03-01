@@ -9,10 +9,5 @@ import org.springframework.stereotype.Component;
 @Data
 public class KafkaConfigurationModel {
 
-    private String server;
-    private String differentInformationTopic;
-    private String privateCaseTopic;
-    private String reportDetailsTopic;
-    private String myModelTopic;
-    private String reportTopic;
+    private String demoTopic;
 }

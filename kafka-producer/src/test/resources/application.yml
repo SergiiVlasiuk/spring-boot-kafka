@@ -1,0 +1,23 @@
+kafka-conf:
+  group-id: test-kafka-group
+  server: ${spring.embedded.kafka.brokers}
+  demo-topic: test_topic
+
+app:
+  cron: 0/5 * * * * * # an event occurs every 5 seconds
+
+spring:
+  profiles:
+    include:
+      - experimental-string
+  kafka:
+    bootstrap-servers: ${kafka-conf.server}
+    consumer:
+      group-id: ${kafka-conf.group-id}
+    embedded:
+      kafka:
+        broker:
+          properties:
+            listener:
+              security:
+                protocol: PLAINTEXT

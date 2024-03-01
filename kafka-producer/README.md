@@ -13,6 +13,14 @@ mvn clean install
 ```
 ### Start app
 consider to start with `spring.profiles.active=experimental-avro`
+
+```
+java -jar target/kafka-producer-0.0.1-SNAPSHOT.jar -Dspring.profiles.active=experimental-avro
+```
+```
+java -jar target/kafka-producer-0.0.1-SNAPSHOT.jar -Dspring.profiles.active=experimental-avro
+```
+
 ## Subject Strategies
 ### Example of Input Data
 - topic name — report_details_topic

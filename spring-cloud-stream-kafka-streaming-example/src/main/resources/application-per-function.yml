@@ -1,6 +1,5 @@
 kafka-conf:
-  server: localhost:9092
-  group: test-streams
+  group: per-function-demo-streams
   consume-topic-report-details: report_details_topic
   report-details-dlq: report_details_dlq
   produce-topic-report-details: report_details_topic_redirect
@@ -101,4 +100,4 @@ spring:
 logging:
   level:
     com.github.ulisesbocchio: INFO
-    com.bayer: DEBUG
+    com.vl.streaming: DEBUG

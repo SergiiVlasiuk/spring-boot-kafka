@@ -1,4 +1,4 @@
-package com.vl.producer.kafka;
+package com.vl.producer.kafka.producer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Slf4j
-public class ActionProducerListener implements ProducerListener<String, Object> {
+public class ActionProducerListener<T> implements ProducerListener<String, T> {
     @Override
-    public void onSuccess(ProducerRecord<String, Object> producerRecord,
+    public void onSuccess(ProducerRecord<String, T> producerRecord,
                           RecordMetadata recordMetadata) {
         String topic = producerRecord.topic();
         Integer partition = producerRecord.partition();
@@ -30,7 +30,7 @@ public class ActionProducerListener implements ProducerListener<String, Object> 
     }
 
     @Override
-    public void onError(ProducerRecord<String, Object> producerRecord,
+    public void onError(ProducerRecord<String, T> producerRecord,
                         RecordMetadata recordMetadata,
                         Exception exception) {
         String topic = producerRecord.topic();

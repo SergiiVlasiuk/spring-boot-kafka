@@ -1,7 +1,7 @@
 # this experimental configuration for checking JsonSerializer.
 kafka-conf:
-  group-id: json-kafka-group
-  demo-topic: my_model_topic
+  group-id: string-kafka-group
+  demo-topic: string_topic
 #  schema-registry: http://localhost:8081
 
 spring:
@@ -10,26 +10,19 @@ spring:
       transactions: true
       bootstrap-servers: ${kafka-conf.server}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-#      properties:
-#        auto.register.schemas: true
-#        schema.registry.url: http://localhost:8081
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
       auto-offset-reset: earliest
       enable-auto-commit: true
       bootstrap-servers: ${kafka-conf.server}
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       properties:
-#        schema.registry.url: http://localhost:8081
         isolation.level: read_committed
         max.poll.interval.ms: 3000
         value.deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-#        spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
-        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
-        spring.json.trusted.packages: com.vl.producer.model
+        spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.json.trusted.packages: com.vl.producer.kafka
 
     admin:
       fail-fast: true

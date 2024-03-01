@@ -1,4 +1,4 @@
-package com.vl.producer.kafka;
+package com.vl.producer.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

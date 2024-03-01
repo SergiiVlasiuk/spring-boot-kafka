@@ -132,4 +132,4 @@ spring:
 logging:
   level:
     com.github.ulisesbocchio: INFO
-    com.bayer: DEBUG
+    com.vl.streaming: DEBUG

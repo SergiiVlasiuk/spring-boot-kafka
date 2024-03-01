@@ -1,7 +1,6 @@
 # working example
 kafka-conf:
-  server: localhost:9092
-  group: test-streams
+  group: default-demo-streams
   consume-topic-report-details: report_details_topic
   report-details-dlq: report_details_dlq
   produce-topic-report-details: report_details_topic_redirect
@@ -20,22 +19,12 @@ spring:
       bindings:
         reportDetails-in-0:
           destination: ${kafka-conf.consume-topic-report-details}
-          consumer:
-            use-native-encoding: true
-          group: ${kafka-conf.group}-reportDetails
         reportDetails-out-0:
           destination: ${kafka-conf.produce-topic-report-details}
-          producer:
-            use-native-encoding: true
         report-in-0:
           destination: ${kafka-conf.consume-topic-report}
-          consumer:
-            use-native-encoding: true
-          group: ${kafka-conf.group}-report
         report-out-0:
           destination: ${kafka-conf.produce-topic-report}
-          producer:
-            use-native-encoding: true
       kafka:
         default:
           producer:
@@ -60,4 +49,4 @@ spring:
 logging:
   level:
     com.github.ulisesbocchio: INFO
-    com.bayer: DEBUG
+    com.vl.streaming: DEBUG
