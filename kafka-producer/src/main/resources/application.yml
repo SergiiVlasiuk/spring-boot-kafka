@@ -2,9 +2,9 @@ kafka-conf:
   server: localhost:9092
 
 app:
-  cron: 20 0/3 * * * * # an event occurs every 3 minutes at the 20th second
-#  cron: 20 0/1 * * * * # an event occurs every minute at the 20th second
-#  cron: 0/15 * * * * * # an event occurs every 15 seconds
+  #  cron: 20 0/3 * * * * # an event occurs every 3 minutes at the 20th second
+  #  cron: 20 0/1 * * * * # an event occurs every minute at the 20th second
+  cron: 0/15 * * * * * # an event occurs every 15 seconds
 #  cron: 0/5 * * * * * # an event occurs every 5 seconds
 
 server:

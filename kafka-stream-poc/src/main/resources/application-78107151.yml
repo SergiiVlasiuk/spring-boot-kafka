@@ -1,0 +1,54 @@
+# for question https://stackoverflow.com/q/78107151/5728095
+# DLQ configuration doesn't work
+kafka-conf:
+  server: localhost:9092
+  group: per-function-demo-streams
+  consume-topic-report: report_topic
+  report-dlq: report_dlq
+  produce-topic-report: report_topic_redirect
+  schema: http://localhost:8081
+
+spring:
+  cloud:
+    function:
+      definition: report
+    stream:
+      bindings:
+        report-in-0:
+          destination: ${kafka-conf.consume-topic-report}
+          group: ${kafka-conf.group}-report-78107151
+          consumer:
+            enableDlq: true
+            dlqName: ${kafka-conf.report-dlq}
+        report-out-0:
+          destination: ${kafka-conf.produce-topic-report}
+      kafka:
+        binder:
+          brokers: ${kafka-conf.server}
+          schemaRegistryUrl: ${kafka-conf.schema}
+        default:
+          producer:
+            configuration:
+              schema.registry.url: ${kafka-conf.schema}
+              key.serializer: org.apache.kafka.common.serialization.StringSerializer
+              value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+              value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+          consumer:
+            configuration:
+              schema.registry.url: ${kafka-conf.schema}
+              key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+              value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+              value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+              specific.avro.reader: true
+        bindings:
+          report-in-0:
+            consumer:
+              configuration:
+                value.deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+                spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+                specific.avro.reader: true
+
+logging:
+  level:
+    com.vl.streaming: DEBUG
+#    org.apache.kafka: DEBUG

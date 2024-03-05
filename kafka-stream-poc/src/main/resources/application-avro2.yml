@@ -1,0 +1,45 @@
+# another failed attempt to use application/*+avro
+kafka-conf:
+  server: localhost:9092
+  group: per-function-demo-streams
+  consume-topic-report: report_topic
+  report-dlq: report_dlq
+  produce-topic-report: report_topic_redirect
+  schema: http://localhost:8081
+
+spring:
+  cloud:
+    stream:
+      schemaRegistryClient:
+        endpoint: ${kafka-conf.schema}
+      schema:
+        avro:
+          dynamicSchemaGenerationEnabled: true
+      kafka:
+        binder:
+          brokers: ${kafka-conf.server}
+          schemaRegistryUrl: ${kafka-conf.schema}
+          configuration.useNativeEncoding: true
+
+      bindings:
+        report-in-0:
+          destination: ${kafka-conf.consume-topic-report}
+          group: ${kafka-conf.group}-report
+          contentType: application/*+avro
+          consumer:
+            partitioned: true
+            concurrency: 1
+            headerMode: embeddedHeaders
+            maxAttempts: 1
+            enableDlq: true
+            dlqName: ${kafka-conf.report-dlq}
+            dlqPartitions: 1
+            configuration:
+              value.deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+              spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+              specific.avro.reader: true
+        report-out-0:
+          destination: ${kafka-conf.produce-topic-report}
+          contentType: application/*+avro
+          producer:
+            headerMode: embeddedHeaders

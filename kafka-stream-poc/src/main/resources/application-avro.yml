@@ -1,0 +1,49 @@
+# corrupted serializer configuration.
+kafka-conf:
+  server: localhost:9092
+  group: per-function-demo-streams
+  consume-topic-report: report_topic
+  report-dlq: report_dlq
+  produce-topic-report: report_topic_redirect
+  schema: http://localhost:8081
+
+spring:
+  application:
+    name: ${kafka-conf.group}-learning
+  cloud:
+    stream:
+      schema:
+        avro:
+          dynamicSchemaGenerationEnabled: true
+          messageConverter: true
+      bindings:
+        report-in-0:
+          destination: ${kafka-conf.consume-topic-report}
+          group: ${kafka-conf.group}-report
+          contentType: application/*+avro
+          consumer:
+            concurrency: 1
+            headerMode: embeddedHeaders
+            maxAttempts: 1
+            enableDlq: true
+            dlqName: ${kafka-conf.report-dlq}
+            dlqPartitions: 1
+            partitioned: true
+#            configuration:
+#              value.deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+#              spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+#              specific.avro.reader: true
+            resetOffsets: true
+            startOffset: earliest
+        report-out-0:
+          destination: ${kafka-conf.produce-topic-report}
+      kafka:
+        binder:
+          brokers: ${kafka-conf.server}
+          schemaRegistryUrl: ${kafka-conf.schema}
+
+
+logging:
+  level:
+    com.vl.streaming: DEBUG
+#    org.apache.kafka: DEBUG
